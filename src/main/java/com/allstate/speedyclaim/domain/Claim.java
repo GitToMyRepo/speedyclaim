@@ -1,28 +1,28 @@
 package com.allstate.speedyclaim.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-public class ClaimInfo {
+public class Claim {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Integer policyNumber;
-    protected String insuranceType;
-    protected String customerName;
-    protected LocalDate startedDate;
-    protected BigDecimal amount;
-    protected String reason;
-    protected String description;
+    private Integer claimId;
+    private Integer policyNumber;
+    @Enumerated(EnumType.STRING)
+    private InsuranceType insuranceType;
+    private String customerName;
+    private LocalDate startedDate;
+    private BigDecimal amount;
+    private String reason;
+    private String description;
 
-    public ClaimInfo() {
+    public Claim() {
     }
 
-    public ClaimInfo(Integer policyNumber, String insuranceType, String customerName, LocalDate startedDate, BigDecimal amount, String reason, String description) {
+    public Claim(Integer claimId, Integer policyNumber, InsuranceType insuranceType, String customerName, LocalDate startedDate, BigDecimal amount, String reason, String description) {
+        this.claimId = claimId;
         this.policyNumber = policyNumber;
         this.insuranceType = insuranceType;
         this.customerName = customerName;
@@ -32,11 +32,19 @@ public class ClaimInfo {
         this.description = description;
     }
 
+    public Integer getClaimId() {
+        return claimId;
+    }
+
+    public void setClaimId(Integer claimId) {
+        this.claimId = claimId;
+    }
+
     public Integer getPolicyNumber() {
         return policyNumber;
     }
 
-    public String getInsuranceType() {
+    public InsuranceType getInsuranceType() {
         return insuranceType;
     }
 
@@ -64,7 +72,7 @@ public class ClaimInfo {
         this.policyNumber = policyNumber;
     }
 
-    public void setInsuranceType(String insuranceType) {
+    public void setInsuranceType(InsuranceType insuranceType) {
         this.insuranceType = insuranceType;
     }
 
@@ -91,8 +99,9 @@ public class ClaimInfo {
     @Override
     public String toString() {
         return "Claim{" +
-                "policyNumber=" + policyNumber +
-                ", insuranceType='" + insuranceType + '\'' +
+                "claimId=" + claimId +
+                ", policyNumber=" + policyNumber +
+                ", insuranceType=" + insuranceType +
                 ", customerName='" + customerName + '\'' +
                 ", startedDate=" + startedDate +
                 ", amount=" + amount +
