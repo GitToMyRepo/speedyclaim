@@ -106,3 +106,5 @@ Branch 'main' set up to track remote branch 'main' from 'origin'.
 git remote add origin https://github.com/GitToMyRepo/speedyclaim.git
 git branch -M main
 git push -u origin main
+
+swagger url: http://localhost:8080/swagger-ui/
