@@ -32,6 +32,11 @@
         <appender-ref ref="stdout"/>
     </logger>
 
+    <logger name="com.allstate.speedyclaim.data" level="DEBUG">
+        <appender-ref ref="ROLLING"/>
+        <appender-ref ref="stdout"/>
+    </logger>
+
     <root level="INFO">
         <appender-ref ref="stdout"/>
         <appender-ref ref="ROLLING"/>

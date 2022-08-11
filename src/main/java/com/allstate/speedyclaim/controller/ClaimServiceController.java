@@ -50,7 +50,7 @@ public class ClaimServiceController {
     }
 
     @PostMapping("/motor")
-    public Claim makeClaim(@RequestBody MotorInsuranceClaimDTO motorInsuranceClaimDTO) {
+    public Claim makeMotorInsuranceClaim(@RequestBody MotorInsuranceClaimDTO motorInsuranceClaimDTO) {
         logger.debug("making claim " + motorInsuranceClaimDTO);
         Claim savedClaim = claimService.makeClaim(motorInsuranceClaimDTO.toNewMotorInsuranceClaim());
         logger.info("saved " + savedClaim);
@@ -58,7 +58,7 @@ public class ClaimServiceController {
     }
 
     @PostMapping("/pet")
-    public Claim makeClaim(@RequestBody PetInsuranceClaimDTO petInsuranceClaimDTO) {
+    public Claim makePetInsuranceClaim(@RequestBody PetInsuranceClaimDTO petInsuranceClaimDTO) {
         logger.debug("making claim " + petInsuranceClaimDTO);
         Claim savedClaim = claimService.makeClaim(petInsuranceClaimDTO.toNewPetInsuranceClaim());
         logger.info("saved " + savedClaim);
@@ -66,10 +66,27 @@ public class ClaimServiceController {
     }
 
     @PostMapping("/property")
-    public Claim makeClaim(@RequestBody PropertyInsuranceClaimDTO propertyInsuranceClaimDTO) {
+    public Claim makePropertyInsuranceClaim(@RequestBody PropertyInsuranceClaimDTO propertyInsuranceClaimDTO) {
         logger.debug("making claim " + propertyInsuranceClaimDTO);
         Claim savedClaim = claimService.makeClaim(propertyInsuranceClaimDTO.toPropertyInsuranceClaim());
         logger.info("saved " + savedClaim);
         return savedClaim;
+    }
+
+    @DeleteMapping("/delete/{claimId}")
+    public void deleteClaim(@PathVariable("claimId") Integer claimId) {
+        logger.info("Entering deleteClaim");
+        logger.info("Deleting claim " + claimId);
+        this.claimService.deleteClaim(claimId);
+        logger.info("Exiting deleteClaim");
+    }
+
+    @PutMapping("/{claimId}")
+    public Claim updateClaim(@PathVariable("claimId") Integer id, @RequestBody Claim claim) {
+        logger.info("updating " + id);
+        logger.info("with " + claim);
+        Claim saved = this.claimService.updateClaim(id, claim);
+        logger.info("saved " + saved);
+        return saved;
     }
 }

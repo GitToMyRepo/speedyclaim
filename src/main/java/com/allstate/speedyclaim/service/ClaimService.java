@@ -15,4 +15,8 @@ public interface ClaimService {
     public List<Claim> getClaimsByType(InsuranceType insuranceType);
 
     public Claim makeClaim(Claim claim);
+
+    public void deleteClaim(Integer claimId);
+
+    public Claim updateClaim(Integer claimId, Claim claim);
 }

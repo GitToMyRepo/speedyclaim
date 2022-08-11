@@ -13,4 +13,5 @@ public interface ClaimRepository extends JpaRepository<Claim, Integer> {
     public Optional<Claim> findByClaimId(Integer claimId);
     public List<Claim> findAllByPolicyNumber(Integer policyNumber);
     public List<Claim> findAllByInsuranceType(InsuranceType insuranceType);
+    public void deleteById(Integer claimId);
 }

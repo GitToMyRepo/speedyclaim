@@ -4,6 +4,8 @@ import com.allstate.speedyclaim.data.ClaimRepository;
 import com.allstate.speedyclaim.domain.Claim;
 import com.allstate.speedyclaim.domain.InsuranceType;
 import com.allstate.speedyclaim.exception.ClaimNotFoundException;
+import com.allstate.speedyclaim.exception.InvalidClaimValueException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,5 +58,41 @@ public class ClaimServiceImpl implements ClaimService {
     public Claim makeClaim(Claim claim) {
         logger.debug("creating " + claim);
         return this.claimRepository.save(claim);
+    }
+
+    @Override
+    public void deleteClaim(Integer claimId) {
+        logger.debug("deleting " + claimId);
+        this.claimRepository.deleteById(claimId);
+    }
+
+    @Override
+    public Claim updateClaim(Integer claimId, Claim claim) {
+        logger.debug("updating " + claimId);
+        Claim returnedClaim = getClaimByClaimId(claimId);
+        this.mergeClaim(returnedClaim, claim);
+        logger.debug("updated " + returnedClaim);
+        this.claimRepository.save(returnedClaim);
+        logger.debug("returning " + returnedClaim);
+        return returnedClaim;
+    }
+
+    private Claim mergeClaim(Claim original, Claim newClaimValues) {
+//        if (newClaimValues.getClaimId() != null && original.getClaimId().intValue() == newClaimValues.getClaimId().intValue()) {
+//            throw new InvalidClaimValueException("Claim Id", String.valueOf(newClaimValues.getClaimId()));
+//        }
+        if (newClaimValues.getPolicyNumber() != null && original.getPolicyNumber().intValue() == newClaimValues.getPolicyNumber().intValue()) {
+            throw new InvalidClaimValueException("Policy number", String.valueOf(newClaimValues.getPolicyNumber()));
+        }
+        logger.info("insurance type class: " + newClaimValues.getInsuranceType().getClass());
+        if (newClaimValues.getInsuranceType() != null && newClaimValues.getInsuranceType().equals(String.valueOf(original.getInsuranceType()))) {
+            throw new InvalidClaimValueException("Insurance Type", String.valueOf(newClaimValues.getInsuranceType()));
+        }
+        original.setCustomerName(StringUtils.isNotBlank(newClaimValues.getCustomerName()) ? newClaimValues.getCustomerName() : original.getCustomerName());
+        original.setStartedDate(newClaimValues.getStartedDate() != null ? newClaimValues.getStartedDate() : original.getStartedDate());
+        original.setAmount(newClaimValues.getAmount() != null ? newClaimValues.getAmount() : original.getAmount());
+        original.setReason(StringUtils.isNotBlank(newClaimValues.getReason()) ? newClaimValues.getReason() : original.getReason());
+        original.setDescription(StringUtils.isNotBlank(newClaimValues.getDescription()) ? newClaimValues.getDescription() : original.getDescription());
+        return original;
     }
 }
