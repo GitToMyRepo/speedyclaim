@@ -28,7 +28,7 @@ public class PetInsuranceClaim extends Claim {
 
     public PetInsuranceClaim(Integer claimId, Integer policyNumber, String customerName, LocalDate startedDate, BigDecimal amount, String reason, String description,
                              String type, String breed) {
-        super(claimId, policyNumber, PET, customerName, startedDate, amount, reason, description);
+        super(claimId, policyNumber, PET, ClaimStatus.NEW_CLAIM, customerName, startedDate, amount, reason, description);
         setType(type);
         setBreed(breed);
     }

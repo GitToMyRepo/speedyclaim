@@ -1,6 +1,7 @@
 package com.allstate.speedyclaim.controller;
 
 import com.allstate.speedyclaim.domain.Claim;
+import com.allstate.speedyclaim.domain.ClaimStatus;
 import com.allstate.speedyclaim.domain.InsuranceType;
 import com.allstate.speedyclaim.dto.MotorInsuranceClaimDTO;
 import com.allstate.speedyclaim.dto.PetInsuranceClaimDTO;
@@ -81,12 +82,27 @@ public class ClaimServiceController {
         logger.info("Exiting deleteClaim");
     }
 
-    @PutMapping("/{claimId}")
-    public Claim updateClaim(@PathVariable("claimId") Integer id, @RequestBody Claim claim) {
-        logger.info("updating " + id);
-        logger.info("with " + claim);
-        Claim saved = this.claimService.updateClaim(id, claim);
-        logger.info("saved " + saved);
-        return saved;
+    @PutMapping("reject/{claimId}")
+    public Claim rejectClaim(@PathVariable("claimId") Integer claimId) {
+        logger.info("updating " + claimId);
+        Claim claim = claimService.rejectClaim(claimId);
+        logger.info("rejected: " + claim);
+        return claim;
+    }
+
+    @PutMapping("accept/{claimId}")
+    public Claim acceptClaim(@PathVariable("claimId") Integer claimId) {
+        logger.info("accepting " + claimId);
+        Claim claim = claimService.acceptClaim(claimId);
+        logger.info("accepted: " + claim);
+        return claim;
+    }
+
+    @PutMapping("pay/{claimId}")
+    public Claim payClaim(@PathVariable("claimId") Integer claimId) {
+        logger.info("paying " + claimId);
+        Claim claim = claimService.acceptClaim(claimId);
+        logger.info("paid: " + claim);
+        return claim;
     }
 }

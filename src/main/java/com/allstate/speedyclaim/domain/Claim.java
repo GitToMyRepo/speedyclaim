@@ -12,6 +12,8 @@ public class Claim {
     private Integer policyNumber;
     @Enumerated(EnumType.STRING)
     private InsuranceType insuranceType;
+    @Enumerated(EnumType.STRING)
+    private ClaimStatus claimStatus;
     private String customerName;
     private LocalDate startedDate;
     private BigDecimal amount;
@@ -21,10 +23,11 @@ public class Claim {
     public Claim() {
     }
 
-    public Claim(Integer claimId, Integer policyNumber, InsuranceType insuranceType, String customerName, LocalDate startedDate, BigDecimal amount, String reason, String description) {
+    public Claim(Integer claimId, Integer policyNumber, InsuranceType insuranceType, ClaimStatus claimStatus, String customerName, LocalDate startedDate, BigDecimal amount, String reason, String description) {
         this.claimId = claimId;
         this.policyNumber = policyNumber;
         this.insuranceType = insuranceType;
+        this.claimStatus = claimStatus;
         this.customerName = customerName;
         this.startedDate = startedDate;
         this.amount = amount;
@@ -68,6 +71,8 @@ public class Claim {
         return description;
     }
 
+    public ClaimStatus getClaimStatus() { return claimStatus; }
+
     public void setPolicyNumber(Integer policyNumber) {
         this.policyNumber = policyNumber;
     }
@@ -96,12 +101,17 @@ public class Claim {
         this.description = description;
     }
 
+    public void setClaimStatus(ClaimStatus claimStatus) {
+        this.claimStatus = claimStatus;
+    }
+
     @Override
     public String toString() {
         return "Claim{" +
                 "claimId=" + claimId +
                 ", policyNumber=" + policyNumber +
                 ", insuranceType=" + insuranceType +
+                ", claimStatus=" + claimStatus +
                 ", customerName='" + customerName + '\'' +
                 ", startedDate=" + startedDate +
                 ", amount=" + amount +

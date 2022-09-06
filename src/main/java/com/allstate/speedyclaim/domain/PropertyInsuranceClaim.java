@@ -29,7 +29,7 @@ public class PropertyInsuranceClaim extends Claim {
 
     public PropertyInsuranceClaim(Integer claimId, Integer policyNumber, String customerName, LocalDate startedDate,
                                   BigDecimal amount, String reason, String description, String address) {
-        super(claimId, policyNumber, PROPERTY, customerName, startedDate, amount, reason, description);
+        super(claimId, policyNumber, PROPERTY, ClaimStatus.NEW_CLAIM, customerName, startedDate, amount, reason, description);
         this.setAddress(address);
     }
 

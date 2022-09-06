@@ -1,5 +1,6 @@
 package com.allstate.speedyclaim.dto;
 
+import com.allstate.speedyclaim.domain.ClaimStatus;
 import com.allstate.speedyclaim.domain.InsuranceType;
 import com.allstate.speedyclaim.domain.Claim;
 import java.math.BigDecimal;
@@ -16,11 +17,11 @@ public class ClaimDTO {
     private String description;
 
     public Claim toNewClaim() {
-        return new Claim(null, policyNumber, insuranceType, customerName, startedDate, amount, reason, description);
+        return new Claim(null, policyNumber, insuranceType, ClaimStatus.NEW_CLAIM, customerName, startedDate, amount, reason, description);
     }
 
     public Claim toClaim() {
-        return new Claim(claimId, policyNumber, insuranceType, customerName, startedDate, amount, reason, description);
+        return new Claim(claimId, policyNumber, insuranceType, ClaimStatus.NEW_CLAIM, customerName, startedDate, amount, reason, description);
     }
 
     public Integer getClaimId() {

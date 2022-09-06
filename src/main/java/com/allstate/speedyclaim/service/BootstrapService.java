@@ -1,7 +1,11 @@
 package com.allstate.speedyclaim.service;
 
+import com.allstate.speedyclaim.controller.LoginController;
 import com.allstate.speedyclaim.data.ClaimRepository;
+import com.allstate.speedyclaim.data.UserRepository;
 import com.allstate.speedyclaim.domain.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +17,16 @@ import java.util.List;
 
 @Service
 public class BootstrapService {
+    Logger logger = LoggerFactory.getLogger(BootstrapService.class);
+
     @Autowired
     private ClaimRepository claimRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserManagementService userManagementService;
 
     @PostConstruct
     public void initialiseData() {
@@ -30,5 +42,17 @@ public class BootstrapService {
         this.claimRepository.save(c2);
         this.claimRepository.save(c3);
         this.claimRepository.save(c4);
+
+        createInitialUsers();
+    }
+
+    private void createInitialUsers() {
+        logger.info("users in the database: " + userRepository.findAll());
+        if (userRepository.findAll().size() == 0) {
+            User user1 = new User("user1", "userpassword", "Bob", UserRole.USER);
+            User user2 = new User("user2", "manpassword", "Liz", UserRole.MANAGER);
+            userManagementService.save(user1);
+            userManagementService.save(user2);
+        }
     }
 }

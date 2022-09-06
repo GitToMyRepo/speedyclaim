@@ -2,6 +2,7 @@ package com.allstate.speedyclaim.service;
 
 import com.allstate.speedyclaim.data.ClaimRepository;
 import com.allstate.speedyclaim.domain.Claim;
+import com.allstate.speedyclaim.domain.ClaimStatus;
 import com.allstate.speedyclaim.domain.InsuranceType;
 import com.allstate.speedyclaim.exception.ClaimNotFoundException;
 import com.allstate.speedyclaim.exception.InvalidClaimValueException;
@@ -19,6 +20,9 @@ import java.util.stream.Collectors;
 @Service
 public class ClaimServiceImpl implements ClaimService {
     Logger logger = LoggerFactory.getLogger(ClaimService.class);
+
+    private static final Integer MAX_CLAIM_AMOUNT = 99999;
+
     @Autowired
     private ClaimRepository claimRepository;
 
@@ -26,6 +30,7 @@ public class ClaimServiceImpl implements ClaimService {
     public List<Claim> getAllClaims() {
         logger.info("Entering getAllClaims");
         logger.debug("returning " + this.claimRepository.findAll());
+        //return this.claimRepository.findAll();
         return this.claimRepository.findAll();
     }
 
@@ -57,7 +62,13 @@ public class ClaimServiceImpl implements ClaimService {
     @Override
     public Claim makeClaim(Claim claim) {
         logger.debug("creating " + claim);
-        return this.claimRepository.save(claim);
+        if (claim.getClaimId() < MAX_CLAIM_AMOUNT) {
+            claim.setClaimStatus(ClaimStatus.HANDLING_IN_MAIN_PLATFORM);
+        }
+        logger.info("saving " + claim);
+        Claim saved = claimRepository.save(claim);
+        logger.info("returning " + saved);
+        return saved;
     }
 
     @Override
@@ -75,6 +86,33 @@ public class ClaimServiceImpl implements ClaimService {
         this.claimRepository.save(returnedClaim);
         logger.debug("returning " + returnedClaim);
         return returnedClaim;
+    }
+
+    @Override
+    public Claim rejectClaim(Integer claimId) {
+        logger.debug("rejecting " + claimId);
+        Claim returnedClaim = updateClaimStatus(claimId, ClaimStatus.REJECTED);
+        return returnedClaim;
+    }
+
+    private Claim updateClaimStatus(Integer claimId, ClaimStatus claimStatus) {
+        Claim returnedClaim = getClaimByClaimId(claimId);
+        returnedClaim.setClaimStatus(claimStatus);
+        this.claimRepository.save(returnedClaim);
+        return returnedClaim;
+    }
+
+    @Override
+    public Claim acceptClaim(Integer claimId) {
+        logger.debug("accepting " + claimId);
+        Claim returnedClaim = updateClaimStatus(claimId, ClaimStatus.AWAITING_FOR_PAYMENT);
+        return returnedClaim;
+    }
+
+    @Override
+    public void payClaim(Integer claimId) {
+        logger.debug("accepting " + claimId);
+        updateClaimStatus(claimId, ClaimStatus.PAID);
     }
 
     private Claim mergeClaim(Claim original, Claim newClaimValues) {

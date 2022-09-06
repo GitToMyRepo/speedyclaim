@@ -19,4 +19,10 @@ public interface ClaimService {
     public void deleteClaim(Integer claimId);
 
     public Claim updateClaim(Integer claimId, Claim claim);
+
+    public Claim rejectClaim(Integer claimId);
+
+    public Claim acceptClaim(Integer claimId);
+
+    public void payClaim(Integer claimId);
 }
